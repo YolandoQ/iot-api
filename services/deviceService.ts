@@ -1,3 +1,4 @@
+import { UpdateQuery } from "mongoose";
 import deviceRepository from "../repositories/deviceRepository";
 
 class DeviceService {
@@ -6,19 +7,19 @@ class DeviceService {
         return deviceRepository.find({});
     };
 
-    getByid(_id) {
+    getByid(_id: string) {
         return deviceRepository.findById(_id);
     }
 
-    create(device) {
+    create(device: string) {
         return deviceRepository.create(device);
     }
 
-    update(_id, device) {
+    update(_id: string, device: UpdateQuery<{ [x: string]: any; }>) {
         return deviceRepository.findByIdAndUpdate(_id, device);
     }
 
-    delete(_id) {
+    delete(_id: string) {
         return deviceRepository.findByIdAndRemove(_id);
     }
  }

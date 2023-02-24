@@ -1,7 +1,6 @@
 import * as express from 'express';
-import Database from './helpers/db';
-
 import * as bodyParser from 'body-parser';
+import Database from './helpers/db';
 import deviceController from './controllers/deviceController';
 
 class startUp {
@@ -24,7 +23,7 @@ class startUp {
 
     routes() {
         this.app.route('/').get((req, res) => {
-            res.send({versao : '0.1'});
+            res.send({ version : '0.1'});
         });
 
         this.app.route("/api/v1/device").get(deviceController.get);

@@ -1,16 +1,20 @@
+import { Schema, Model, DefaultSchemaOptions } from "mongoose";
+
 class Helper {
-  responseJson = function (res, code, data) {
+  responseJson = function (res: { status: (arg0: any) => { (): any; new(): any; json: { (arg0: { success: boolean; message: string; data: {}; }): void; new(): any; }; }; }, code: number, success: boolean, message: string, data: any = {}) {
     res.status(code).json({
-      result: data,
+      success: success,
+      message: message,
+      data: data,
     });
   };
 
-  validateRequiredFields = function (schema, data) {
+  validateRequiredFields = function (schema: Schema<any, Model<any, any, any, any, any>, {}, {}, {}, {}, DefaultSchemaOptions, { [x: string]: any; }>, data: { [x: string]: any; }) {
 
-    const missingFields  = [];
-    const requiredFields = this.getRequiredFields(schema);
+    const missingFields: string[] = [];
+    const requiredFields: string[] = this.getRequiredFields(schema);
 
-    requiredFields.forEach((field) => {
+    requiredFields.forEach((field: string) => {
       if (!data[field]) {
         missingFields.push(field);
       }
@@ -24,7 +28,7 @@ class Helper {
     }
   };
 
-  getRequiredFields = function (schema) {
+  getRequiredFields = function (schema: { paths: { [x: string]: { isRequired: boolean; }; }; }) {
     const requiredFields: string[] = [];
 
     for (const path in schema.paths) {

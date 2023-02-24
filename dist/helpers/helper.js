@@ -2,9 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class Helper {
     constructor() {
-        this.responseJson = function (res, code, data) {
+        this.responseJson = function (res, code, success, message, data = {}) {
             res.status(code).json({
-                result: data,
+                success: success,
+                message: message,
+                data: data,
             });
         };
         this.validateRequiredFields = function (schema, data) {

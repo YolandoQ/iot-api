@@ -1,70 +1,146 @@
-import deviceService from "../services/deviceService";
 import * as httpStatus from "http-status";
 import helper from "../helpers/helper";
 import deviceSchema from "../models/deviceSchema";
+import deviceService from "../services/deviceService";
 
 class DeviceController {
-    async get(req, res) {
-      try {
-        const devices = await deviceService.get();
-        return helper.responseJson(res, httpStatus.OK, devices);
-      } catch (error) {
-        return helper.responseJson(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
-      }
+  async get(req, res) {
+    try {
+      const devices = await deviceService.get();
+      return helper.responseJson(
+        res,
+        httpStatus.OK,
+        true,
+        "Request made successfully",
+        devices
+      );
+    } catch (error) {
+      return helper.responseJson(
+        res,
+        httpStatus.INTERNAL_SERVER_ERROR,
+        false,
+        error.message,
+      );
     }
-  
-    async getById(req, res) {
-      const _id = req.params.id;
-      try {
-        const device = await deviceService.getByid(_id);
-        if (!device) {
-          return helper.responseJson(res, httpStatus.NOT_FOUND, "Device not found");
-        }
-        return helper.responseJson(res, httpStatus.OK, device);
-      } catch (error) {
-        return helper.responseJson(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
-      }
-    }
-  
-    async create(req, res) {
-      const deviceVm = req.body;
-      try {
-        helper.validateRequiredFields(deviceSchema, deviceVm);
-  
-        const createdDevice = await deviceService.create(deviceVm);
-        return helper.responseJson(res, httpStatus.OK, "Device registered.");
-      } catch (error) {
-        return helper.responseJson(res, httpStatus.BAD_REQUEST, error.message);
-      }
-    }
-  
-    async update(req, res) {
-      const _id = req.params.id;
-      const deviceVm = req.body;
-      try {
+  }
 
-        helper.validateRequiredFields(deviceSchema, deviceVm);
-  
-        const updatedDevice = await deviceService.update(_id, deviceVm);
-        if (!updatedDevice) {
-          return helper.responseJson(res, httpStatus.NOT_FOUND, "Device not found");
-        }
-        return helper.responseJson(res, httpStatus.OK, "Device updated.");
-      } catch (error) {
-        return helper.responseJson(res, httpStatus.BAD_REQUEST, error.message);
-      }
-    }
-
-  async delete(req, res) {
+  async getById(req, res) {
     const _id = req.params.id;
     try {
-      const deletedDevice = await deviceService.delete(_id);
-      if (!deletedDevice) {
-        return helper.responseJson(res, httpStatus.NOT_FOUND, "Device not found");
+      const device = await deviceService.getByid(_id);
+      if (!device) {
+        return helper.responseJson(
+          res,
+          httpStatus.NOT_FOUND,
+          false,
+          "Device not found"
+        );
       }
-      return helper.responseJson(res, httpStatus.OK, "Device deleted.");
+      return helper.responseJson(
+        res,
+        httpStatus.OK,
+        true,
+        "Request made successfully",
+        device
+      );
     } catch (error) {
-      return helper.responseJson(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+      return helper.responseJson(
+        res,
+        httpStatus.INTERNAL_SERVER_ERROR,
+        false,
+        error.message
+      );
+    }
+  }
+
+  async create(req, res) {
+
+    const deviceVm = req.body;
+    
+    try {
+
+      helper.validateRequiredFields(deviceSchema, deviceVm);
+      const createdDevice = await deviceService.create(deviceVm);
+
+      return helper.responseJson(
+        res,
+        httpStatus.OK,
+        true,
+        "Device registered"
+      );
+    } catch (error) {
+      return helper.responseJson(
+        res,
+        httpStatus.BAD_REQUEST,
+        false,
+        error.message
+      );
+    }
+  }
+
+  async update(req, res) {
+
+    const _id = req.params.id;
+    const deviceVm = req.body;
+
+    try {
+
+      helper.validateRequiredFields(deviceSchema, deviceVm);
+      const updatedDevice = await deviceService.update(_id, deviceVm);
+      
+      if (!updatedDevice) {
+        return helper.responseJson(
+          res,
+          httpStatus.NOT_FOUND,
+          false,
+          "Device not found"
+        );
+      }
+
+      return helper.responseJson(
+        res,
+        httpStatus.OK,
+        true,
+        "Device updated"
+      );
+    } catch (error) {
+      return helper.responseJson(
+        res,
+        httpStatus.BAD_REQUEST,
+        false,
+        error.message
+      );
+    }
+  }
+
+  async delete(req, res) {
+
+    const _id = req.params.id;
+    
+    try {
+      const deletedDevice = await deviceService.delete(_id);
+    
+      if (!deletedDevice) {
+        return helper.responseJson(
+          res,
+          httpStatus.NOT_FOUND,
+          false,
+          "Device not found"
+        );
+      }
+      return helper.responseJson(
+        res,
+        httpStatus.OK,
+        true,
+        "Device deleted"
+      );
+    } catch (error) {
+      return helper.responseJson(
+        res,
+        httpStatus.INTERNAL_SERVER_ERROR,
+        false,
+        error.message
+      );
     }
   }
 }

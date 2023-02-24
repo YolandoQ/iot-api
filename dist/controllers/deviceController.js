@@ -9,19 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const deviceService_1 = require("../services/deviceService");
 const httpStatus = require("http-status");
 const helper_1 = require("../helpers/helper");
 const deviceSchema_1 = require("../models/deviceSchema");
+const deviceService_1 = require("../services/deviceService");
 class DeviceController {
     get(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const devices = yield deviceService_1.default.get();
-                return helper_1.default.responseJson(res, httpStatus.OK, devices);
+                return helper_1.default.responseJson(res, httpStatus.OK, true, "Request made successfully", devices);
             }
             catch (error) {
-                return helper_1.default.responseJson(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+                return helper_1.default.responseJson(res, httpStatus.INTERNAL_SERVER_ERROR, false, error.message);
             }
         });
     }
@@ -31,12 +31,12 @@ class DeviceController {
             try {
                 const device = yield deviceService_1.default.getByid(_id);
                 if (!device) {
-                    return helper_1.default.responseJson(res, httpStatus.NOT_FOUND, "Device not found");
+                    return helper_1.default.responseJson(res, httpStatus.NOT_FOUND, false, "Device not found");
                 }
-                return helper_1.default.responseJson(res, httpStatus.OK, device);
+                return helper_1.default.responseJson(res, httpStatus.OK, true, "Request made successfully", device);
             }
             catch (error) {
-                return helper_1.default.responseJson(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+                return helper_1.default.responseJson(res, httpStatus.INTERNAL_SERVER_ERROR, false, error.message);
             }
         });
     }
@@ -46,10 +46,10 @@ class DeviceController {
             try {
                 helper_1.default.validateRequiredFields(deviceSchema_1.default, deviceVm);
                 const createdDevice = yield deviceService_1.default.create(deviceVm);
-                return helper_1.default.responseJson(res, httpStatus.OK, "Device registered.");
+                return helper_1.default.responseJson(res, httpStatus.OK, true, "Device registered");
             }
             catch (error) {
-                return helper_1.default.responseJson(res, httpStatus.BAD_REQUEST, error.message);
+                return helper_1.default.responseJson(res, httpStatus.BAD_REQUEST, false, error.message);
             }
         });
     }
@@ -61,12 +61,12 @@ class DeviceController {
                 helper_1.default.validateRequiredFields(deviceSchema_1.default, deviceVm);
                 const updatedDevice = yield deviceService_1.default.update(_id, deviceVm);
                 if (!updatedDevice) {
-                    return helper_1.default.responseJson(res, httpStatus.NOT_FOUND, "Device not found");
+                    return helper_1.default.responseJson(res, httpStatus.NOT_FOUND, false, "Device not found");
                 }
-                return helper_1.default.responseJson(res, httpStatus.OK, "Device updated.");
+                return helper_1.default.responseJson(res, httpStatus.OK, true, "Device updated");
             }
             catch (error) {
-                return helper_1.default.responseJson(res, httpStatus.BAD_REQUEST, error.message);
+                return helper_1.default.responseJson(res, httpStatus.BAD_REQUEST, false, error.message);
             }
         });
     }
@@ -76,12 +76,12 @@ class DeviceController {
             try {
                 const deletedDevice = yield deviceService_1.default.delete(_id);
                 if (!deletedDevice) {
-                    return helper_1.default.responseJson(res, httpStatus.NOT_FOUND, "Device not found");
+                    return helper_1.default.responseJson(res, httpStatus.NOT_FOUND, false, "Device not found");
                 }
-                return helper_1.default.responseJson(res, httpStatus.OK, "Device deleted.");
+                return helper_1.default.responseJson(res, httpStatus.OK, true, "Device deleted");
             }
             catch (error) {
-                return helper_1.default.responseJson(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+                return helper_1.default.responseJson(res, httpStatus.INTERNAL_SERVER_ERROR, false, error.message);
             }
         });
     }

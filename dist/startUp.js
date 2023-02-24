@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const db_1 = require("./helpers/db");
 const bodyParser = require("body-parser");
+const db_1 = require("./helpers/db");
 const deviceController_1 = require("./controllers/deviceController");
 class startUp {
     constructor() {
@@ -18,7 +18,7 @@ class startUp {
     }
     routes() {
         this.app.route('/').get((req, res) => {
-            res.send({ versao: '0.1' });
+            res.send({ version: '0.1' });
         });
         this.app.route("/api/v1/device").get(deviceController_1.default.get);
         this.app.route("/api/v1/device/:id").get(deviceController_1.default.getById);
