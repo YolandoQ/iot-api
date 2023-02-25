@@ -1,6 +1,7 @@
 import { Schema, Model, DefaultSchemaOptions } from "mongoose";
 
 class Helper {
+  
   responseJson = function (res: { status: (arg0: any) => { (): any; new(): any; json: { (arg0: { success: boolean; message: string; data: {}; }): void; new(): any; }; }; }, code: number, success: boolean, message: string, data: any = {}) {
     res.status(code).json({
       success: success,
@@ -9,7 +10,7 @@ class Helper {
     });
   };
 
-  validateRequiredFields = function (schema: Schema<any, Model<any, any, any, any, any>, {}, {}, {}, {}, DefaultSchemaOptions, { [x: string]: any; }>, data: { [x: string]: any; }) {
+  validateRequiredFields = function (schema, data: { [x: string]: any; }) {
 
     const missingFields: string[] = [];
     const requiredFields: string[] = this.getRequiredFields(schema);
@@ -39,6 +40,8 @@ class Helper {
 
     return requiredFields;
   };
+
+  
 }
 
 export default new Helper();
