@@ -9,5 +9,6 @@ RUN npm install
 COPY ./dist .
 
 EXPOSE 3050
+EXPOSE 3051
 
 CMD ["npm", "start"]
