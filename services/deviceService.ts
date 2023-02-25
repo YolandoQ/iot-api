@@ -16,7 +16,11 @@ class DeviceService {
     }
 
     update(_id: string, device: UpdateQuery<{ [x: string]: any; }>) {
-        return deviceRepository.findByIdAndUpdate(_id, device);
+        return deviceRepository.findByIdAndUpdate(
+            _id, 
+            { $set: device },
+            { new: true }
+        );
     }
 
     delete(_id: string) {

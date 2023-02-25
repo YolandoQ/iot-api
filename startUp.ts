@@ -1,39 +1,47 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
+import express, { Application } from 'express';
+import bodyParser from 'body-parser';
+import WebSocketServer from "./websocket/websocket";
 import Database from './helpers/db';
 import deviceController from './controllers/deviceController';
 
-class startUp {
-    
-    public app: express.Application;
-    private _db: Database;
+class StartUp {
+    public app: Application;
+    private db: Database;
+    private wsServer: typeof WebSocketServer;
 
     constructor() {
         this.app = express();
-        this._db = new Database();
-        this._db.createConnection();
+        this.db = new Database();
+        this.db.createConnection();
         this.middleware();
         this.routes();
+        this.initWebSocketServer();
     }
 
-    middleware() {
+    private middleware() {
         this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({extended: false}));
+        this.app.use(bodyParser.urlencoded({ extended: false }));
     }
 
-    routes() {
-        this.app.route('/').get((req, res) => {
-            res.send({ version : '0.1'});
+    private routes() {
+        this.app.get('/', (req, res) => {
+            res.send({ version: '0.1' });
         });
 
-        this.app.route("/api/v1/device").get(deviceController.get);
-        this.app.route("/api/v1/device/:id").get(deviceController.getById);
-        this.app.route("/api/v1/device").post(deviceController.create);
-        this.app.route("/api/v1/device/:id").put(deviceController.update);
-        this.app.route("/api/v1/device/:id").delete(deviceController.delete);
-
+        this.app.route('/api/v1/device')
+            .get(deviceController.get)
+            .post(deviceController.create);
+        
+        this.app.route('/api/v1/device/:id')
+            .get(deviceController.getById)
+            .put(deviceController.update)
+            .delete(deviceController.delete);
     }
 
+    private initWebSocketServer() {
+        this.wsServer = WebSocketServer;
+        this.wsServer.start();
+    }
 }
 
-export default new startUp(); 
+export default new StartUp().app;

@@ -2,11 +2,12 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
+    "esModuleInterop": true,
     "outDir": "dist",
     "typeRoots": ["../node_modules/@types"],
     "types": ["node"]
   },
-  "include": ["**/*.ts", "*.ts"],
+  "include": ["**/*.ts", "*.ts", "websocket/websocket.ts"],
   "exclude": ["node_modules"],
   "buildOnSave": true,
   "compileOnSave": true
